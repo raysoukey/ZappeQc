@@ -1,0 +1,23 @@
+:root {
+  font-family: system-ui, "Segoe UI", sans-serif;
+  color: #f3f3f3;
+  background-color: #121212;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+h1 {
+  margin: 0;
+}

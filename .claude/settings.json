@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm *)",
+      "PowerShell(pnpm *)",
+      "Bash(cargo *)",
+      "PowerShell(cargo *)",
+      "Bash(rustup *)",
+      "PowerShell(rustup *)",
+      "Bash(rustfmt *)",
+      "Bash(node *)",
+      "PowerShell(node *)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "PowerShell(git status*)",
+      "PowerShell(git diff*)",
+      "PowerShell(git log*)",
+      "PowerShell(scripts/dev-debug.ps1*)",
+      "PowerShell(.\scripts\dev-debug.ps1*)"
+    ],
+    "deny": ["Read(./.remember/logs/**)", "Read(./src-tauri/target/**)"]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/format.mjs\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
