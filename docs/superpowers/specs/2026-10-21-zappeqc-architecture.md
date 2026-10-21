@@ -61,8 +61,25 @@ Conclusions :
   `/tva-sports-2/en-direct` (les deux dernières exigent un abonnement).
 - La résolution 512×288 est celle choisie par le lecteur adaptatif pour une zone de 1000 px ;
   à revérifier en plein écran lors du développement de l'interface.
-- Reste à relever les URL de direct de Noovo (sous Crave), Télé-Québec et ICI Télé, et à
-  vérifier si elles exigent un compte.
+
+### Relevé des directs (2026-10-21, même méthode : webview enfant WebView2 + CDP)
+
+| Chaîne              | URL de direct                                                     | Compte                                                      | Lecture testée                                                 |
+| ------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------- |
+| TVA                 | `https://www.tvaplus.ca/tva/en-direct`                            | Aucun (TVA+ annonce que la connexion viendra)               | OK, 512×288 dans 1000 px, sans DRM                             |
+| Télé-Québec         | `https://telequebec.tv/regarder/en-direct/telequebec`             | Aucun                                                       | OK, **1280×720 avec session DRM active** (`mediaKeys` vrai)    |
+| ICI Télé (Montréal) | `https://ici.tou.tv/chaine/ici-tele-montreal`                     | Compte Radio-Canada gratuit (« Me connecter »)              | Non testée (connexion requise)                                 |
+| ICI Télé (régions)  | `https://ici.tou.tv/chaine/ici-tele-<region>` (quebec, estrie, …) | Idem                                                        | Non testée                                                     |
+| Noovo               | `https://www.crave.ca/fr/live?channel=noovo&group=allchannels`    | Compte Bell Média gratuit (noovo.ca fermé le 30 avril 2026) | Non testée ; identifiant `noovo` à confirmer une fois connecté |
+| ICI RDI             | `https://ici.tou.tv/chaine/ici-rdi`                               | Abonnement ICI TOU.TV Extra                                 | Hors périmètre « gratuit »                                     |
+| TVA Sports, LCN     | `/tva-sports/en-direct`, etc. sur TVA+                            | Abonnement                                                  | Hors périmètre « gratuit »                                     |
+
+Notes :
+
+- `telequebec.tv/en-direct` redirige vers `/en-direct/telequebec`, mais c'est `/regarder/en-direct/telequebec` qui porte le lecteur.
+- `ici.radio-canada.ca/tele/en-direct` n'affiche rien d'utile ; la page officielle du direct est sur TOU.TV, section `/section/en-direct`.
+- Télé-Québec et Radio-Canada affichent une bannière de témoins (cookies) au premier chargement ; l'utilisateur la ferme une fois, le choix est mémorisé dans le profil WebView2.
+- Les connexions (Bell Média, Radio-Canada) se font dans la webview ; ZappeQc n'intervient pas.
 
 ## Hors périmètre de la première étape
 
