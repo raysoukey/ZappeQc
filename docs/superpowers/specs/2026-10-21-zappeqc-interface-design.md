@@ -178,3 +178,20 @@ et rechargement de la chaîne. Désactivé s'il n'y a pas de webview ouverte.
 
 - `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` pour le glisser-déposer.
 - Rien côté Rust.
+
+## Validations
+
+Scénario de bout en bout du 2026-10-21, exécuté sur l'app en dev (`scripts/dev-debug.ps1`) et
+piloté par CDP sur le port 9222 (clics et touches simulés, tailles lues dans chaque webview).
+
+| Date       | Étape du scénario                 | Résultat                                                                                                                                                                                                   |
+| ---------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-10-21 | 1. Démarrage sans préférences     | OK : zone d'accueil, aucune page diffuseur dans la liste CDP                                                                                                                                               |
+| 2026-10-21 | 2. Clic TVA                       | OK : page `tvaplus.ca/tva/en-direct` créée, bouton « Effacer » actif                                                                                                                                       |
+| 2026-10-21 | 3. Clic Télé-Québec               | OK : page TVA disparue, `telequebec.tv` présente (une seule webview enfant), 1040×800 pour une fenêtre 1280×800                                                                                            |
+| 2026-10-21 | 4. Épingler Noovo, replier        | OK : Noovo en tête, rail de 64 px, `zappeqc.json` écrit (pinned, sidebarCollapsed). Glisser-déposer non simulé par CDP ; réducteur couvert par `prefs.test.ts`                                             |
+| 2026-10-21 | 5. F, bande, Échap                | OK : plein écran 1920×1080, enfant 1914 px ; survol bande → enfant 1680 px ; Échap → 1280×800, enfant 1040 px                                                                                              |
+| 2026-10-21 | 5b. ↓, 3, Ctrl+B                  | OK : ↓ boucle de Télé-Québec (dernière) à Noovo (première) ; 3 → TVA ; Ctrl+B → repli                                                                                                                      |
+| 2026-10-21 | 6. Relance                        | OK : Télé-Québec rouverte, Noovo épinglé, état de barre conservé                                                                                                                                           |
+| 2026-10-21 | 7. Effacer les données (ICI Télé) | OK : confirmation affichée, page rechargée, bouton « Me connecter » de nouveau visible                                                                                                                     |
+| 2026-10-21 | 8. Fenêtre au minimum             | Vérifié indirectement : les transitions plein écran (1280→1920→1280) passent par `onResized` et repositionnent la webview sans bande noire. Redimensionnement manuel à 960×600 à refaire par l'utilisateur |

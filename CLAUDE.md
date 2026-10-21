@@ -33,7 +33,9 @@ inutile de lancer le format à la main après une édition.
 ## Structure
 
 ```
-src/                    interface React (composants, hooks, src/channels.ts = table des chaînes)
+src/                    interface React : channels.ts (table), prefs.ts (réducteur), layout.ts (rectangle),
+                        keyboard.ts (raccourcis), store.ts (plugin store), player/ (webview enfant),
+                        hooks/ (usePrefs, useFullscreen, useKeyboard), components/ (Sidebar…)
 src-tauri/              coquille Rust : lib.rs, tauri.conf.json, capabilities/default.json
 scripts/                scripts PowerShell utilitaires (dev-debug.ps1)
 docs/superpowers/specs/ specs de conception (une par fonctionnalité)
@@ -70,3 +72,4 @@ docs/superpowers/plans/ plans d'implémentation
 
 Voir `docs/superpowers/specs/2026-10-21-zappeqc-architecture.md` pour les décisions et la
 section « Validations » (résultat du spike DRM).
+Interface v1 livrée (spec `docs/superpowers/specs/2026-10-21-zappeqc-interface-design.md`).
