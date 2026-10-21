@@ -42,11 +42,27 @@ officiels des diffuseurs.
 
 ## Validations
 
-_(À remplir après le spike DRM.)_
+Spike DRM du 2026-10-21 (code jeté, non commité) : webview enfant Tauri (`unstable`) créée
+depuis React vers `https://www.tvaplus.ca/`, inspectée par CDP sur le port 9222.
 
-| Date | Test                                 | Résultat |
-| ---- | ------------------------------------ | -------- |
-|      | Lecture TVA+ dans une webview enfant |          |
+| Test                                                      | Résultat                                                                                                                               |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Création d'une webview enfant à côté de l'interface React | OK, `tauri://created` reçu, redimensionnement sur `onResized` OK                                                                       |
+| `requestMediaKeySystemAccess` dans la webview enfant      | `com.widevine.alpha` OK, `com.microsoft.playready` OK, `com.microsoft.playready.recommendation` OK                                     |
+| Page de direct TVA (`/tva/en-direct`)                     | Lecteur video.js, bouton « Lire la vidéo », **aucune connexion exigée** (bandeau « prochainement »)                                    |
+| Lecture de TVA Nouvelles en direct                        | OK : `readyState 4`, `paused false`, 512×288 après 64 s, aucune erreur, pas de session EME (flux non chiffré pour un visiteur anonyme) |
+| UA de la webview                                          | `Chrome/155 … Edg/155` (WebView2), accepté par TVA+                                                                                    |
+
+Conclusions :
+
+- L'architecture « interface React + webview enfant » est validée sur Windows ; pas besoin du
+  repli `WebviewWindow`.
+- URL de direct TVA+ relevées dans le site : `/tva/en-direct`, `/tva-sports/en-direct`,
+  `/tva-sports-2/en-direct` (les deux dernières exigent un abonnement).
+- La résolution 512×288 est celle choisie par le lecteur adaptatif pour une zone de 1000 px ;
+  à revérifier en plein écran lors du développement de l'interface.
+- Reste à relever les URL de direct de Noovo (sous Crave), Télé-Québec et ICI Télé, et à
+  vérifier si elles exigent un compte.
 
 ## Hors périmètre de la première étape
 
