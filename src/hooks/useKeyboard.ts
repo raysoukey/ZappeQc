@@ -11,6 +11,8 @@ export function useKeyboard(onAction: (action: KeyAction) => void) {
         altKey: e.altKey,
         metaKey: e.metaKey,
         targetTag: target?.tagName ?? "BODY",
+        repeat: e.repeat,
+        defaultPrevented: e.defaultPrevented,
       });
       if (!action) return;
       e.preventDefault();

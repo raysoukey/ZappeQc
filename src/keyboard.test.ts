@@ -60,3 +60,15 @@ describe("channelForDigit", () => {
     expect(channelForDigit(shown, 7)).toBeNull();
   });
 });
+
+describe("keyToAction — répétition et événements déjà traités", () => {
+  it("ignore la répétition clavier pour le zapping, pas pour le plein écran", () => {
+    expect(k("ArrowDown", { repeat: true })).toBeNull();
+    expect(k("3", { repeat: true })).toBeNull();
+    expect(k("f", { repeat: true })).toEqual({ type: "toggleFullscreen" });
+  });
+  it("ignore un événement déjà consommé (defaultPrevented) par un autre composant", () => {
+    expect(k("ArrowDown", { defaultPrevented: true })).toBeNull();
+    expect(k("f", { defaultPrevented: true })).toBeNull();
+  });
+});

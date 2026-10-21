@@ -212,3 +212,17 @@ button:disabled {
   background: #181818;
   cursor: pointer;
 }
+
+.drag-handle {
+  background: transparent;
+  border: none;
+  color: #666;
+  padding: 4px 4px;
+  cursor: grab;
+  font-size: 0.7rem;
+  letter-spacing: -2px;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}

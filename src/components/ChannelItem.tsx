@@ -22,9 +22,15 @@ export function ChannelItem({
   onSelect,
   onTogglePin,
 }: Props) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: channel.id,
-  });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: channel.id });
   const style = { transform: CSS.Transform.toString(transform), transition };
   const title = collapsed ? `${index + 1}. ${channel.name}` : undefined;
 
@@ -33,13 +39,13 @@ export function ChannelItem({
       ref={setNodeRef}
       style={style}
       className={["channel", selected ? "selected" : "", isDragging ? "dragging" : ""].join(" ")}
-      {...attributes}
-      {...listeners}
     >
       <button
         type="button"
         className="channel-main"
         title={title}
+        aria-label={collapsed ? channel.name : undefined}
+        aria-current={selected ? "true" : undefined}
         onClick={() => onSelect(channel.id)}
       >
         <span className="monogram" style={{ background: channel.color }}>
@@ -51,18 +57,27 @@ export function ChannelItem({
         )}
       </button>
       {!collapsed && (
-        <button
-          type="button"
-          className={pinned ? "pin pinned" : "pin"}
-          title={pinned ? "Retirer des favoris" : "Épingler en favori"}
-          aria-pressed={pinned}
-          onClick={(e) => {
-            e.stopPropagation();
-            onTogglePin(channel.id);
-          }}
-        >
-          ★
-        </button>
+        <>
+          <button
+            type="button"
+            className={pinned ? "pin pinned" : "pin"}
+            title={pinned ? "Retirer des favoris" : "Épingler en favori"}
+            aria-pressed={pinned}
+            onClick={() => onTogglePin(channel.id)}
+          >
+            ★
+          </button>
+          <button
+            type="button"
+            ref={setActivatorNodeRef}
+            className="drag-handle"
+            title="Déplacer (glisser, ou Espace puis flèches)"
+            {...attributes}
+            {...listeners}
+          >
+            ⋮⋮
+          </button>
+        </>
       )}
     </li>
   );

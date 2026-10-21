@@ -157,6 +157,11 @@ et rechargement de la chaîne. Désactivé s'il n'y a pas de webview ouverte.
   (ferme et recrée).
 - Échec de `close()` d'une webview orpheline → ignoré, on tente la création ; si elle échoue
   parce que le label existe, on réessaie une fois après `getByLabel().close()`.
+- Les demandes d'ouverture sont **sérialisées** (une création de webview à la fois, file
+  `Serial`) et une demande remplacée avant son tour est sautée (`Sequence`). Un réessai seul ne
+  suffit pas : deux créations concurrentes se disputent le label `player`. La répétition clavier
+  (`e.repeat`) est ignorée pour le zapping, et un événement déjà consommé par le tri clavier de
+  dnd-kit (`defaultPrevented`) n'est pas interprété comme raccourci.
 - Store illisible (JSON corrompu) → `DEFAULT_PREFS`, avertissement en console, le fichier est
   réécrit à la prochaine sauvegarde.
 - Les erreurs côté diffuseur (connexion requise, panne, géoblocage) restent affichées dans la
