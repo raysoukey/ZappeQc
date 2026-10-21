@@ -27,3 +27,6 @@ dist-ssr
 src-tauri/target/
 src-tauri/gen/schemas/
 .claude/settings.local.json
+
+# Espace de travail des plans (superpowers)
+.superpowers/
