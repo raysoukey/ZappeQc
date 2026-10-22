@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { REVEAL_HIDE_DELAY_MS } from "../layout";
 
@@ -46,5 +46,8 @@ export function useFullscreen() {
 
   useEffect(() => clearTimer, []);
 
-  return { fullscreen, revealed, toggle, exit, reveal, hideSoon };
+  return useMemo(
+    () => ({ fullscreen, revealed, toggle, exit, reveal, hideSoon }),
+    [fullscreen, revealed, toggle, exit, reveal, hideSoon],
+  );
 }

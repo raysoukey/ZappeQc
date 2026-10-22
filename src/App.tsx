@@ -20,31 +20,33 @@ function App() {
   };
   const player = usePlayer(layout);
   const openedLast = useRef(false);
+  const { open, retry, clearData } = player;
+  const { toggle: toggleFullscreen, exit: exitFullscreen } = fs;
 
   useEffect(() => {
     if (prefs && !openedLast.current) {
       openedLast.current = true;
-      if (prefs.lastChannelId) player.open(prefs.lastChannelId);
+      if (prefs.lastChannelId) open(prefs.lastChannelId);
     }
-  }, [prefs, player]);
+  }, [prefs, open]);
 
   const shownIds = useMemo(() => (prefs ? displayOrder(prefs) : []), [prefs]);
 
   const select = useCallback(
     (id: ChannelId) => {
       dispatch({ type: "selectChannel", id });
-      player.open(id);
+      open(id);
     },
-    [dispatch, player],
+    [dispatch, open],
   );
 
   const onKey = useCallback(
     (a: KeyAction) => {
       switch (a.type) {
         case "toggleFullscreen":
-          return fs.toggle();
+          return toggleFullscreen();
         case "exitFullscreen":
-          return fs.exit();
+          return exitFullscreen();
         case "toggleCollapsed":
           return dispatch({
             type: "setCollapsed",
@@ -62,7 +64,15 @@ function App() {
         }
       }
     },
-    [dispatch, fs, player.state.channelId, prefs?.sidebarCollapsed, select, shownIds],
+    [
+      dispatch,
+      toggleFullscreen,
+      exitFullscreen,
+      player.state.channelId,
+      prefs?.sidebarCollapsed,
+      select,
+      shownIds,
+    ],
   );
   useKeyboard(onKey);
 
@@ -95,9 +105,9 @@ function App() {
             onToggleCollapsed={() =>
               dispatch({ type: "setCollapsed", collapsed: !prefs.sidebarCollapsed })
             }
-            onToggleFullscreen={fs.toggle}
-            onRetry={player.retry}
-            onClearData={player.clearData}
+            onToggleFullscreen={toggleFullscreen}
+            onRetry={retry}
+            onClearData={clearData}
           />
         </div>
       )}

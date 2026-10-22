@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { channelById, type ChannelId } from "../channels";
 import { playerRect, type LayoutState } from "../layout";
@@ -85,5 +85,6 @@ export function usePlayer(layout: LayoutState) {
     void relayout();
   }, [relayout, layout.collapsed, layout.fullscreen, layout.revealed]);
 
-  return { state, open, retry, clearData };
+  // Identité stable : les consommateurs peuvent dépendre de l'objet sans se réabonner à chaque rendu.
+  return useMemo(() => ({ state, open, retry, clearData }), [state, open, retry, clearData]);
 }
