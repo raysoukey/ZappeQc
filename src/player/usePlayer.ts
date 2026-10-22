@@ -21,15 +21,20 @@ export function usePlayer(layout: LayoutState) {
   const layoutRef = useRef(layout);
   const seq = useRef(new Sequence());
   const queue = useRef(new Serial());
+  const relayoutSeq = useRef(new Sequence());
 
   // Dernière disposition connue, lue par `open` et par le repositionnement.
   useEffect(() => {
     layoutRef.current = layout;
   }, [layout]);
 
+  // Dernier gagnant : un repositionnement dépassé par un plus récent est abandonné
+  // avant d'appeler la webview (plusieurs resize rapprochés pendant un redimensionnement).
   const relayout = useCallback(async () => {
-    const rect = playerRect(await windowLogicalSize(), layoutRef.current);
-    await relayoutPlayer(rect);
+    const n = relayoutSeq.current.next();
+    const size = await windowLogicalSize();
+    if (!relayoutSeq.current.isCurrent(n)) return;
+    await relayoutPlayer(playerRect(size, layoutRef.current));
   }, []);
 
   const open = useCallback(
