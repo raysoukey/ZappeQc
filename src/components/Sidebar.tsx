@@ -26,11 +26,15 @@ const SHORTCUTS_HELP =
 export function Sidebar(p: SidebarProps) {
   const [confirmClear, setConfirmClear] = useState(false);
   const [clearing, setClearing] = useState(false);
+  const [clearError, setClearError] = useState<string | null>(null);
 
   async function clearData() {
     setClearing(true);
+    setClearError(null);
     try {
       await p.onClearData();
+    } catch (e) {
+      setClearError(String(e));
     } finally {
       setClearing(false);
       setConfirmClear(false);
@@ -114,6 +118,11 @@ export function Sidebar(p: SidebarProps) {
             >
               Effacer les données de navigation
             </button>
+          )}
+          {clearError && (
+            <p className="footer-error" role="alert">
+              Effacement impossible : {clearError}
+            </p>
           )}
         </footer>
       )}
