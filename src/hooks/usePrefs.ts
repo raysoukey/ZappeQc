@@ -2,16 +2,18 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { applyPrefsAction, type Prefs, type PrefsAction } from "../prefs";
 import { loadPrefs, savePrefs } from "../store";
 
-/** Charge les préférences au montage, applique les actions et sauvegarde après chaque changement. */
+/** Charge les préférences au montage, applique les actions et sauvegarde chaque changement. */
 export function usePrefs() {
   const [prefs, setPrefs] = useState<Prefs | null>(null);
-  const loaded = useRef(false);
+  // Dernier objet chargé ou sauvegardé : on n'écrit que si l'état a vraiment changé,
+  // donc jamais au simple démarrage.
+  const persisted = useRef<Prefs | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     void loadPrefs().then((p) => {
       if (!cancelled) {
-        loaded.current = true;
+        persisted.current = p;
         setPrefs(p);
       }
     });
@@ -21,7 +23,10 @@ export function usePrefs() {
   }, []);
 
   useEffect(() => {
-    if (prefs && loaded.current) void savePrefs(prefs);
+    if (prefs && prefs !== persisted.current) {
+      persisted.current = prefs;
+      void savePrefs(prefs);
+    }
   }, [prefs]);
 
   const dispatch = useCallback((action: PrefsAction) => {
