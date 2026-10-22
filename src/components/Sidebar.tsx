@@ -52,6 +52,7 @@ export function Sidebar(p: SidebarProps) {
           type="button"
           className="collapse"
           onClick={p.onToggleCollapsed}
+          onDoubleClick={(e) => e.stopPropagation()}
           title={p.collapsed ? "Déplier la barre (Ctrl+B)" : "Replier la barre (Ctrl+B)"}
           aria-label={p.collapsed ? "Déplier" : "Replier"}
         >

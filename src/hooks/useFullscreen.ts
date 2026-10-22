@@ -6,6 +6,9 @@ export function useFullscreen() {
   const [fullscreen, setFullscreen] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const timer = useRef<number | null>(null);
+  // État visé, mis à jour dès la demande : deux pressions rapides de F s'annulent
+  // même si `setFullscreen` n'a pas encore répondu.
+  const target = useRef(false);
 
   const clearTimer = () => {
     if (timer.current !== null) {
@@ -15,19 +18,21 @@ export function useFullscreen() {
   };
 
   const apply = useCallback(async (on: boolean) => {
+    target.current = on;
     try {
       await getCurrentWindow().setFullscreen(on);
       setFullscreen(on);
       setRevealed(false);
     } catch (e) {
+      target.current = !on;
       console.warn("Plein écran refusé :", e);
     }
   }, []);
 
-  const toggle = useCallback(() => void apply(!fullscreen), [apply, fullscreen]);
+  const toggle = useCallback(() => void apply(!target.current), [apply]);
   const exit = useCallback(() => {
-    if (fullscreen) void apply(false);
-  }, [apply, fullscreen]);
+    if (target.current) void apply(false);
+  }, [apply]);
 
   const reveal = useCallback(() => {
     clearTimer();
