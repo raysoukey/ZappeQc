@@ -226,3 +226,30 @@ button:disabled {
 .drag-handle:active {
   cursor: grabbing;
 }
+
+.rail-status,
+.rail-error {
+  display: block;
+  width: 32px;
+  margin: 4px auto;
+  text-align: center;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.rail-status {
+  color: #aaa;
+  letter-spacing: 2px;
+}
+
+.rail-error {
+  padding: 2px 0;
+  background: #7a2e2e;
+  border-color: #a33;
+  color: #fff;
+}
+
+.welcome-hint {
+  font-size: 0.85rem;
+  color: #777;
+}

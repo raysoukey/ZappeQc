@@ -101,10 +101,11 @@ function App() {
           />
         </div>
       )}
-      {player.state.status === "idle" && !fs.fullscreen && (
+      {player.state.status === "idle" && (
         <main className="welcome">
           <h2>Choisissez une chaîne</h2>
           <p>La page de direct du diffuseur s'ouvrira ici.</p>
+          {fs.fullscreen && <p className="welcome-hint">Échap pour quitter le plein écran</p>}
         </main>
       )}
     </div>

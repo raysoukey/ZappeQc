@@ -73,6 +73,23 @@ export function Sidebar(p: SidebarProps) {
         <PlayerError message={p.player.error ?? "Erreur inconnue"} onRetry={p.onRetry} />
       )}
 
+      {p.collapsed && p.player.status === "loading" && (
+        <span className="rail-status" title="Chargement…" aria-label="Chargement…">
+          …
+        </span>
+      )}
+      {p.collapsed && p.player.status === "error" && (
+        <button
+          type="button"
+          className="rail-error"
+          title={`Impossible d'ouvrir le lecteur : ${p.player.error ?? "erreur inconnue"}. Cliquer pour réessayer.`}
+          aria-label="Erreur du lecteur, réessayer"
+          onClick={p.onRetry}
+        >
+          !
+        </button>
+      )}
+
       {!p.collapsed && (
         <footer className="sidebar-footer">
           {p.player.status === "loading" && <p className="status">Chargement…</p>}
