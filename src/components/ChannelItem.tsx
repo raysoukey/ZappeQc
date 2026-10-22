@@ -1,6 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Channel, ChannelId } from "../channels";
+import { digitLabel } from "../keyboard";
 import { AccountBadge } from "./AccountBadge";
 
 interface Props {
@@ -32,7 +33,8 @@ export function ChannelItem({
     isDragging,
   } = useSortable({ id: channel.id });
   const style = { transform: CSS.Transform.toString(transform), transition };
-  const title = collapsed ? `${index + 1}. ${channel.name}` : undefined;
+  const digit = digitLabel(index);
+  const title = digit ? `${digit}. ${channel.name}` : collapsed ? channel.name : undefined;
 
   return (
     <li
@@ -48,6 +50,7 @@ export function ChannelItem({
         aria-current={selected ? "true" : undefined}
         onClick={() => onSelect(channel.id)}
       >
+        {!collapsed && digit && <span className="channel-index">{digit}</span>}
         <span className="monogram" style={{ background: channel.color }}>
           {channel.monogram}
         </span>

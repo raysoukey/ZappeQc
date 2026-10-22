@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { ChannelId } from "./channels";
-import { channelForDigit, keyToAction, nextChannel } from "./keyboard";
+import { channelForDigit, digitLabel, keyToAction, nextChannel } from "./keyboard";
 
 const k = (key: string, extra: Partial<Parameters<typeof keyToAction>[0]> = {}) =>
   keyToAction({ key, ctrlKey: false, altKey: false, metaKey: false, targetTag: "BODY", ...extra });
@@ -70,5 +70,14 @@ describe("keyToAction — répétition et événements déjà traités", () => {
   it("ignore un événement déjà consommé (defaultPrevented) par un autre composant", () => {
     expect(k("ArrowDown", { defaultPrevented: true })).toBeNull();
     expect(k("f", { defaultPrevented: true })).toBeNull();
+  });
+});
+
+describe("digitLabel", () => {
+  it("donne 1 à 9 pour les indices 0 à 8, rien au-delà", () => {
+    expect(digitLabel(0)).toBe("1");
+    expect(digitLabel(8)).toBe("9");
+    expect(digitLabel(9)).toBeNull();
+    expect(digitLabel(-1)).toBeNull();
   });
 });

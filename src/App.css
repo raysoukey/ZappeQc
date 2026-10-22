@@ -253,3 +253,11 @@ button:disabled {
   font-size: 0.85rem;
   color: #777;
 }
+
+.channel-index {
+  width: 12px;
+  font-size: 0.7rem;
+  color: #666;
+  text-align: right;
+  flex-shrink: 0;
+}

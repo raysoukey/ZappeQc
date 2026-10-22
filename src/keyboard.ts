@@ -48,3 +48,8 @@ export function nextChannel(
 export function channelForDigit(shown: ChannelId[], index: number): ChannelId | null {
   return shown[index] ?? null;
 }
+
+/** Chiffre de raccourci affiché pour la N-ième chaîne (1 à 9), `null` au-delà. */
+export function digitLabel(index: number): string | null {
+  return Number.isInteger(index) && index >= 0 && index < 9 ? String(index + 1) : null;
+}
